@@ -1,8 +1,45 @@
-name: hello-world
-on: push
+name: Build and Deploy QA
+
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  my-job:
+  build:
+    name: Build
     runs-on: self-hosted
+
     steps:
-      - name: my-step
-        run: echo "Hello World!"
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build application
+        run: |
+          echo "Building application..."
+          # Add your build command here
+          # npm run build
+
+  deploy-qa:
+    name: Deploy to QA
+    needs: build
+    runs-on: self-hosted
+
+    steps:
+      - name: Deploy application
+        run: |
+          echo "Deploying to QA..."
+          # Add your QA deployment command here
+          # ./deploy.sh qa
+
+  qa:
+    name: QA Checks
+    needs: deploy-qa
+    runs-on: self-hosted
+
+    steps:
+      - name: Run QA checks
+        run: |
+          echo "Running QA checks..."
+          # Add your QA test command here
+          # npm run test
